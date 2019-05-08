@@ -1,5 +1,5 @@
-const width = 500;
-const height = 500;
+const width = 1000;
+const height = 900;
 
 function Snake() {
 	this.size = 20;
@@ -94,8 +94,8 @@ Snake.prototype.foodcollide = function(foodarr) {
 }
 
 Snake.prototype.outofbounds = function() {
-	return (this.tail[0][0] > width ||
-		this.tail[0][1] > height ||
+	return (this.tail[0][0] >= width ||
+		this.tail[0][1] >= height ||
 		this.tail[0][0] < 0 ||
 		this.tail[0][1] < 0);
 }
@@ -103,6 +103,10 @@ Snake.prototype.outofbounds = function() {
 function spawnFood() {
 	var x = Math.floor(random(1, width/s.size))*s.size;
 	var y = Math.floor(random(1, height/s.size))*s.size;
+	while (s.insnake([x, y])) {
+		var x = Math.floor(random(1, width/s.size))*s.size;
+		var y = Math.floor(random(1, height/s.size))*s.size;
+	}
 	food.push([x,y]);
 }
 
