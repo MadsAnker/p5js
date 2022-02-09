@@ -1,8 +1,12 @@
-var ll = 1000;
+var ll = 200;
 var numRange = 1000;
 var drawList;
 var waitTime = 1;
 var osc = new p5.TriOsc();
+
+function setTime(time) {
+	document.getElementById('vid').currentTime = time;
+}
 
 
 async function merge(arr, start, middle, end) {
@@ -30,7 +34,7 @@ async function merge(arr, start, middle, end) {
 			arr[put] = l[lindex];
 			lindex++;
 		}
-		osc.freq(map(arr[put], 0, numRange, 100, 1000));
+		setTime(map(arr[put], 0, numRange, 0, 200));
 		put++;
 		await sleep(waitTime);
 	}
@@ -38,14 +42,14 @@ async function merge(arr, start, middle, end) {
 	if (rindex < rl) {
 		for (; rindex < rl; rindex++) {
 			arr[put] = r[rindex];
-			osc.freq(map(arr[put], 0, numRange, 100, 1000));
+			setTime(map(arr[put], 0, numRange, 0, 200));
 			put++;
 			await sleep(waitTime);
 		}
 	} else {
 		for (; lindex < ll; lindex++) {
 			arr[put] = l[lindex];
-			osc.freq(map(arr[put], 0, numRange, 100, 1000));
+			setTime(map(arr[put], 0, numRange, 0, 200));
 			put++;
 			await sleep(waitTime);
 		}
@@ -74,15 +78,17 @@ function setup() {
 		drawList[i] = int(random(1, numRange));
 	}
 	osc.start();
-	mergeSort(drawList, 0, drawList.length);
+	mergeSort(drawList, 0, drawList.length).then();
 }
 
 function draw() {
 	background(255);
 	strokeWeight(0);
+	from = color(255, 0, 0);
+	to = color(0, 0, 255);
 	for (var i = 0; i < ll; i++) {
 		var h = drawList[i]*height/numRange;
-		fill(0, 200, 100);
+		fill(lerpColor(from,to,h/height));
 		rect(width/ll*i, height-h, width/ll, h);
 	}
 }
